@@ -1,0 +1,26 @@
+
+
+- name: update
+  apt:
+    update_cache: yes
+
+- name: Install FTP server 
+  apt:
+    name: "vsftpd"
+    state: present
+
+- name: Configure FTP server
+  template:                      #start and enable vsftpd service
+   src: vsftpd.conf.j2
+   dest: /etc/vsftpd.conf
+   notify: Restart vsftpd
+
+- name: Ensure FTP server starts on boot
+  systemd:
+    name: vsftpd
+    enabled:  yes
+
+- meta:flush_handlers    
+
+
+# tasks file for ftp-server
